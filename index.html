@@ -6,112 +6,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ungleichheit in Deutschland - Dashboard</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 </head>
 
 <body>
-  <!-- Navigation -->
-  <nav class="nav-bar">
-    <div class="nav-container">
-      <h2>📊 Daten-Dashboard Deutschland</h2>
+
+  <div class="main-wrapper">
+    <!-- Navigation -->
+    <nav class="nav-container">
       <div class="nav-links">
         <a href="#income" class="nav-link active" data-chart="income">💰 Einkommen</a>
         <a href="#gini" class="nav-link" data-chart="gini">📈 Gini-Index</a>
         <a href="#wealth" class="nav-link" data-chart="wealth">🏦 Vermögen</a>
         <a href="#poverty" class="nav-link" data-chart="poverty">⚠️ Armut</a>
-        <a href="#education" class="nav-link" data-chart="education">🎓 Bildung</a>
       </div>
-    </div>
-  </nav>
+    </nav>
 
-  <div class="container">
-    <header class="header">
-      <h1>Ungleichheit in Deutschland</h1>
-      <p class="subtitle">Interaktive Visualisierung aktueller Daten zur sozialen Ungleichheit</p>
-    </header>
+    <!-- Content-Bereich -->
+    <div class="content-wrapper">
+      <!-- Linke Spalte: Titel und Quadrat-Visualisierung -->
+      <div class="chart-column">
+        <div class="chart-header">
+          <h2 class="chart-title" id="chartTitle">Einkommensverteilung</h2>
+          <div>
+            <span class="data-year" id="dataYear">2022</span>
+            <span class="data-source" id="dataSource">Destatis</span>
+          </div>
+        </div>
 
-    <!-- Datenquellen Info -->
-    <div class="data-sources">
-      <h3>📋 Datenquellen</h3>
-      <div class="source-links">
-        <a href="https://www.destatis.de" target="_blank" class="source-link">
-          🏛️ Statistisches Bundesamt
-        </a>
-        <a href="https://www.diw.de" target="_blank" class="source-link">
-          📊 DIW Berlin
-        </a>
-        <a href="https://www.oecd.org/germany/" target="_blank" class="source-link">
-          🌍 OECD Deutschland
-        </a>
-        <a href="https://ec.europa.eu/eurostat" target="_blank" class="source-link">
-          🇪🇺 Eurostat
-        </a>
-      </div>
-    </div>
-
-    <!-- Chart Controls -->
-    <div class="controls">
-      <button id="btn-income" class="control-btn active" data-chart="income">
-        💰 Einkommensverteilung
-      </button>
-      <button id="btn-gini" class="control-btn" data-chart="gini">
-        📈 Gini-Koeffizient
-      </button>
-      <button id="btn-wealth" class="control-btn" data-chart="wealth">
-        🏦 Vermögensverteilung
-      </button>
-      <button id="btn-poverty" class="control-btn" data-chart="poverty">
-        ⚠️ Armutsrisiko
-      </button>
-      <button id="btn-education" class="control-btn" data-chart="education">
-        🎓 Bildungschancen
-      </button>
-      <button id="btn-animation" class="control-btn" data-chart="animation">
-        🎬 Animierte Trends
-      </button>
-      <button id="btn-race" class="control-btn" data-chart="race">
-        🏁 Bar Chart Race
-      </button>
-    </div>
-
-    <!-- Chart Container -->
-    <div class="chart-container">
-      <div class="chart-header">
-        <h2 class="chart-title" id="chartTitle">Einkommensverteilung in Deutschland</h2>
-        <div class="chart-meta" id="chartMeta">
-          <span class="data-year" id="dataYear">2022</span>
-          <span class="data-source" id="dataSource">Destatis</span>
+        <div class="chart-visual-wrapper">
+          <!-- Visuelles Quadrat im Hintergrund -->
+          <div class="dashboard-square-background"></div>
+          <!-- SVG-Container, der über dem Quadrat liegt und die Skalen enthält -->
+          <div id="chart-svg-container"></div>
         </div>
       </div>
-      <div id="chartContent" class="chart-content"></div>
-      <div class="chart-legend" id="chartLegend"></div>
-    </div>
 
-    <!-- Statistics Cards -->
-    <div class="stats-grid" id="statsContainer">
-      <!-- Wird dynamisch gefüllt -->
+      <!-- Rechte Spalte: Statistiken -->
+      <aside class="stats-column" id="statsContainer">
+        <!-- Statistiken werden hier dynamisch eingefügt -->
+      </aside>
     </div>
-
-    <!-- Additional Info -->
-    <div class="info-section">
-      <div class="info-card">
-        <h3>💡 Über die Daten</h3>
-        <p>Die hier dargestellten Daten basieren auf offiziellen Statistiken des Statistischen Bundesamts,
-          des DIW Berlin und anderen vertrauenswürdigen Quellen. Alle Werte wurden für das Jahr 2022
-          erhoben oder entsprechend hochgerechnet.</p>
-      </div>
-      <div class="info-card">
-        <h3>📈 Methodik</h3>
-        <p>Die Visualisierungen verwenden verschiedene Metriken zur Messung von Ungleichheit:
-          Gini-Koeffizient (0-1), Quantilsverhältnisse, Armutsrisikoquoten nach EU-Standard.</p>
-      </div>
-    </div>
-
-    <footer class="footer">
-      <p>Erstellt mit ❤️ für besseres Verständnis sozialer Ungleichheit |
-        Daten: Destatis, DIW, OECD |
-        <a href="https://github.com" target="_blank">Code auf GitHub</a>
-      </p>
-    </footer>
   </div>
 
   <!-- Scripts -->
