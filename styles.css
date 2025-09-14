@@ -2,30 +2,28 @@
 :root {
   --bg-gradient-start: #667eea;
   --bg-gradient-end: #764ba2;
-  --card-bg-color: rgba(255, 255, 255, 0.92);
-  --text-color: #2c3e50;
-  --text-color-light: #555;
-  --axis-text-color: #444;
-  --border-color: #e0e0e0;
-  --shadow-color: rgba(0, 0, 0, 0.08);
+  --card-bg-color: rgba(255, 255, 255, 0.8);
+  --text-color: #1a202c;
+  --text-color-light: #4a5568;
+  --axis-text-color: #ffffff;
+  --border-color: #e2e8f0;
+  --shadow-color: rgba(0, 0, 0, 0.15);
   --accent-color: #667eea;
   --quadrat-radius: 25px;
-  /* KORREKTUR: Definieren der Abstände als Variablen für die Berechnung */
-  --main-padding: 2vmin;
-  --main-gap: 1.5rem;
+  --main-gap: 2rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-gradient-start: #4a00e0;
-    --bg-gradient-end: #8e2de2;
-    --card-bg-color: rgba(27, 27, 48, 0.88);
-    --text-color: #e0e0e0;
-    --text-color-light: #a0a0a0;
-    --axis-text-color: #c0c0c0;
-    --border-color: #3a3a5a;
-    --shadow-color: rgba(0, 0, 0, 0.2);
-    --accent-color: #8e44ad;
+    --bg-gradient-start: #1a202c;
+    --bg-gradient-end: #2d3748;
+    --card-bg-color: rgba(26, 32, 44, 0.8);
+    --text-color: #f7fafc;
+    --text-color-light: #cbd5e0;
+    --axis-text-color: #ffffff;
+    --border-color: #4a5568;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --accent-color: #9f7aea;
   }
 }
 
@@ -35,197 +33,239 @@
   box-sizing: border-box;
 }
 
-html,
-body {
-  height: 100%;
-  overflow: hidden;
-}
-
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
   color: var(--text-color);
-  /* KORREKTUR: Padding vom Body entfernen, um Berechnungsfehler zu vermeiden */
+  overflow: hidden;
+  font-weight: 500;
 }
 
 /* 2. Haupt-Layout-Struktur */
 .main-wrapper {
-  /* KORREKTUR: Zurück zu Flexbox, da es für diesen Fall mit calc() einfacher ist */
+  height: 100vh;
+  width: 100%;
+  padding: var(--main-gap);
   display: flex;
-  flex-direction: column;
+}
+
+.content-wrapper {
   width: 100%;
   height: 100%;
   max-width: 1600px;
   margin: 0 auto;
-  gap: var(--main-gap);
-  /* KORREKTUR: Padding hier anwenden. Dank box-sizing:border-box wird die Höhe nicht überschritten. */
-  padding: var(--main-padding);
-}
-
-.content-wrapper {
-  /* KORREKTUR: Nimmt den verbleibenden Platz ein, min-height: 0 ist der Schlüssel */
-  flex-grow: 1;
-  min-height: 0;
-
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-  gap: 2rem;
-  align-items: stretch;
-  /* Stellt sicher, dass beide Spalten die volle Höhe einnehmen */
+  grid-template-columns: 1fr 300px;
+  gap: var(--main-gap);
+  align-items: start;
 }
 
-.chart-column {
+.left-column {
   display: flex;
   flex-direction: column;
+  height: 100%;
   min-width: 0;
-  min-height: 0;
+  width: 75vh;
+  margin: auto;
 }
 
-/* 3. Navigation */
-.nav-container {
-  background: var(--card-bg-color);
-  backdrop-filter: blur(12px);
-  padding: 0.8rem 1rem;
-  border-radius: var(--quadrat-radius);
-  box-shadow: 0 10px 40px var(--shadow-color);
-  flex-shrink: 0;
-  /* Verhindert, dass die Navigation schrumpft */
-}
-
-.nav-links {
+.right-column {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  gap: var(--main-gap);
+  height: 75vh;
+  position: relative;
+  top: 12.5vh;
+  left: -16.25vh;
+
+  /* Vollständig relative horizontale Zentrierung:
+     Nutze 80% der verfügbaren Grid-Spaltenbreite und zentriere automatisch */
+  width: 80%;
+  margin: 0 auto;
 }
 
-.nav-link {
-  text-decoration: none;
-  color: var(--text-color-light);
-  padding: 0.6rem 1.2rem;
-  border-radius: 20px;
-  transition: all 0.3s ease;
-  font-weight: 500;
-}
-
-.nav-link.active {
-  background: linear-gradient(45deg, var(--bg-gradient-start), var(--bg-gradient-end));
-  color: white;
-}
-
-/* 4. Dashboard (Quadrat und Titel) */
+/* 3. Linke Spalte: Header und Diagramm */
 .chart-header {
   flex-shrink: 0;
+  margin-bottom: 1rem;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 0 0.5rem;
-  margin-bottom: 1rem;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.chart-title-section {
+  flex: 1;
 }
 
 .chart-title {
-  font-size: 1.8rem;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+}
+
+.chart-meta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .data-year,
 .data-source {
-  background: rgba(0, 0, 0, 0.05);
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
+  background: var(--card-bg-color);
+  color: var(--text-color);
+  padding: 0.5rem 1rem;
+  border-radius: 15px;
   font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  border: 2px solid var(--border-color);
 }
 
 .chart-visual-wrapper {
   flex-grow: 1;
   position: relative;
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-height: 0;
 }
 
+/* Größeres Quadrat - 75% der verfügbaren Höhe */
 .dashboard-square-background {
   background: var(--card-bg-color);
-  backdrop-filter: blur(12px);
-  border-radius: var(--quadrat-radius);
-  box-shadow: 0 10px 40px var(--shadow-color);
+  /* border-radius: var(--quadrat-radius); */
+  box-shadow: 0 15px 50px var(--shadow-color);
   width: 100%;
   aspect-ratio: 1 / 1;
-  max-width: 100%;
-  max-height: 100%;
+  max-width: min(100%, 75vh);
+  max-height: 75vh;
+  border: 3px solid var(--border-color);
 }
 
-#chart-svg-container {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-
-/* 5. Statistiken (Rechte Spalte) */
-.stats-column {
+/* 4. Rechte Spalte: Buttons & Statistiken */
+.nav-container {
+  background: var(--card-bg-color);
+  border-radius: var(--quadrat-radius);
+  box-shadow: 0 15px 50px var(--shadow-color);
+  padding: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  /* Schiebt die Karten nach unten */
-  gap: 1rem;
+  border: 3px solid var(--border-color);
+  flex-shrink: 0;
 }
 
+.nav-link {
+  text-decoration: none;
+  color: var(--text-color);
+  padding: 1.2rem 1.5rem;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  text-align: center;
+  border-bottom: 2px solid var(--border-color);
+  background: transparent;
+}
+
+.nav-link:last-child {
+  border-bottom: none;
+}
+
+.nav-link:hover {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.nav-link.active {
+  color: var(--accent-color);
+  font-weight: 700;
+  background: rgba(102, 126, 234, 0.15);
+}
+
+.stats-column {
+  display: grid;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+/* Kleinere Info-Boxen mit 20% Transparenz */
 .stat-card {
   background: var(--card-bg-color);
-  padding: 1.5rem;
+  padding: 0.6rem 0.8rem;
   border-radius: var(--quadrat-radius);
   text-align: center;
-  box-shadow: 0 5px 20px var(--shadow-color);
+  box-shadow: 0 4px 15px var(--shadow-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 2px solid var(--border-color);
+  min-height: 0;
+  opacity: 0.8;
 }
 
 .stat-number {
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: 1.3rem;
+  font-weight: 800;
   background: linear-gradient(45deg, var(--bg-gradient-start), var(--bg-gradient-end));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.2rem;
 }
 
 .stat-label {
-  font-size: 1rem;
-  color: var(--text-color-light);
-  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  margin-bottom: 0.2rem;
+  font-weight: 600;
+  line-height: 1.2;
 }
 
 .stat-change {
-  margin-top: 0.5rem;
-  font-weight: 500;
+  font-size: 0.7rem;
+  font-weight: 600;
 }
 
 .stat-change.positive {
-  color: #e74c3c;
+  color: #e53e3e;
 }
 
 .stat-change.negative {
-  color: #27ae60;
+  color: #38a169;
 }
 
 .stat-change.neutral {
   color: var(--text-color-light);
 }
 
-/* 6. D3 Chart Styling */
-#chart-svg-container svg {
-  overflow: visible;
+/* 5. D3 Chart Styling */
+.d3-chart {
+  position: absolute;
+  overflow: visible !important;
 }
 
+/* Weiße, fette Schrift für Achsen mit Abstand zum Quadrat */
 .d3-chart .axis text {
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 1.8em;
+  font-weight: 800;
   fill: var(--axis-text-color);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  transform-origin: center;
+  /* Rotationspunkt in der Mitte */
 }
 
-@media (prefers-color-scheme: dark) {
-  .d3-chart .axis text {
-    text-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
-  }
+/* Spezifische Rotation nur für X-Achse (horizontal): */
+.d3-chart .x.axis text {
+transform: rotate(-60deg);
 }
 
 .d3-chart .axis path,
 .d3-chart .axis line {
-  stroke: var(--border-color);
+  stroke: var(--axis-text-color);
+  stroke-width: 2;
+  filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.5));
 }
 
 .d3-chart .bar {
@@ -241,23 +281,18 @@ body {
 .d3-chart .dot {
   fill: var(--accent-color);
   stroke: var(--card-bg-color);
-  stroke-width: 2;
+  stroke-width: 3;
 }
 
-/* 7. Responsive Anpassungen */
-@media (max-width: 1024px) {
+/* 6. Responsive Design */
+@media (max-width: 768px) {
   .content-wrapper {
     grid-template-columns: 1fr;
-    align-items: stretch;
+    grid-template-rows: 1fr auto;
   }
 
-  .stats-column {
-    justify-content: flex-start;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
-
-  .chart-column {
-    min-height: 50vh;
+  .chart-header {
+    flex-direction: column;
+    gap: 1rem;
   }
 }

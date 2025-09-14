@@ -10,46 +10,41 @@
 </head>
 
 <body>
-
   <div class="main-wrapper">
-    <!-- Navigation -->
-    <nav class="nav-container">
-      <div class="nav-links">
-        <a href="#income" class="nav-link active" data-chart="income">💰 Einkommen</a>
-        <a href="#gini" class="nav-link" data-chart="gini">📈 Gini-Index</a>
-        <a href="#wealth" class="nav-link" data-chart="wealth">🏦 Vermögen</a>
-        <a href="#poverty" class="nav-link" data-chart="poverty">⚠️ Armut</a>
-      </div>
-    </nav>
-
-    <!-- Content-Bereich -->
     <div class="content-wrapper">
-      <!-- Linke Spalte: Titel und Quadrat-Visualisierung -->
-      <div class="chart-column">
+      <!-- LINKE SPALTE -->
+      <div class="left-column">
         <div class="chart-header">
-          <h2 class="chart-title" id="chartTitle">Einkommensverteilung</h2>
-          <div>
+          <div class="chart-title-section">
+            <h2 class="chart-title" id="chartTitle">Einkommensverteilung</h2>
+          </div>
+          <div class="chart-meta">
             <span class="data-year" id="dataYear">2022</span>
             <span class="data-source" id="dataSource">Destatis</span>
           </div>
         </div>
 
         <div class="chart-visual-wrapper">
-          <!-- Visuelles Quadrat im Hintergrund -->
           <div class="dashboard-square-background"></div>
-          <!-- SVG-Container, der über dem Quadrat liegt und die Skalen enthält -->
-          <div id="chart-svg-container"></div>
         </div>
       </div>
 
-      <!-- Rechte Spalte: Statistiken -->
-      <aside class="stats-column" id="statsContainer">
-        <!-- Statistiken werden hier dynamisch eingefügt -->
-      </aside>
+      <!-- RECHTE SPALTE -->
+      <div class="right-column">
+        <nav class="nav-container">
+          <a href="#income" class="nav-link active" data-chart="income">💰 Einkommen</a>
+          <a href="#gini" class="nav-link" data-chart="gini">📈 Gini-Index</a>
+          <a href="#wealth" class="nav-link" data-chart="wealth">🏦 Vermögen</a>
+          <a href="#poverty" class="nav-link" data-chart="poverty">⚠️ Armut</a>
+        </nav>
+
+        <aside class="stats-column" id="statsContainer">
+          <!-- Statistiken werden hier dynamisch eingefügt -->
+        </aside>
+      </div>
     </div>
   </div>
 
-  <!-- Scripts -->
   <script src="data.js"></script>
   <script src="app.js"></script>
 </body>

@@ -1,6 +1,6 @@
 const inequalityData = {
   income: {
-    labels: ['Unterstes 10%', '2. Dezil', '3. Dezil', '4. Dezil', '5. Dezil', '6. Dezil', '7. Dezil', '8. Dezil', '9. Dezil', 'Oberstes 10%'],
+    labels: ['1. Dezil ', '2. ', '3. ', '4. ', '5. ', '6. ', '7. ', '8. ', '9. ', '10.'],
     values: [2.4, 3.9, 5.2, 6.5, 7.9, 9.1, 10.7, 12.4, 15.2, 26.7],
     title: 'Einkommensverteilung',
     type: 'bar', unit: '%', source: 'DIW SOEP 2022', year: '2022',
@@ -21,15 +21,16 @@ const inequalityData = {
       { number: '+11.8%', label: 'Anstieg seit 2010', change: 'stärker als im EU-Schnitt', changeType: 'positive' }
     ]
   },
+  // Vermögensverteilung jetzt in 10%-Schritten
   wealth: {
-    labels: ['Unterste 50%', 'Mittlere 40%', 'Oberste 10%', 'Oberstes 1%'],
-    values: [2.8, 34.5, 62.7, 35.2],
+    labels: ['1. ', '2. ', '3. ', '4. ', '5. ', '6. ', '7. ', '8. ', '9. ', '10. Dezil'],
+    values: [0.1, 0.3, 0.8, 1.4, 2.2, 3.4, 5.8, 9.2, 15.1, 61.7],
     title: 'Vermögensverteilung',
     type: 'bar', unit: '%', source: 'DIW, Bundesbank', year: '2022',
     stats: [
-      { number: '62.7%', label: 'Vermögen der oberen 10%', change: '+1.2%', changeType: 'positive' },
-      { number: '2.8%', label: 'Vermögen der unteren 50%', change: '+0.3%', changeType: 'positive' },
-      { number: '22.4x', label: 'Konzentrationsfaktor', change: 'Top 10% vs Bottom 50%', changeType: 'positive' }
+      { number: '61.7%', label: 'Vermögen der oberen 10%', change: '+1.2%', changeType: 'positive' },
+      { number: '0.1%', label: 'Vermögen der unteren 10%', change: 'nahezu null', changeType: 'negative' },
+      { number: '617x', label: 'Konzentrationsfaktor', change: 'Top 10% vs Bottom 10%', changeType: 'positive' }
     ]
   },
   poverty: {

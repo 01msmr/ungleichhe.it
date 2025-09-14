@@ -24,10 +24,9 @@ class InequalityDashboard {
       });
     });
 
-    // Verwende ResizeObserver für eine präzisere und performantere Reaktion auf Größenänderungen
-    const chartWrapper = document.getElementById('chart-svg-container');
+    const chartColumn = document.querySelector('.left-column');
     const resizeObserver = new ResizeObserver(() => this.showChart(this.currentChart));
-    resizeObserver.observe(chartWrapper);
+    resizeObserver.observe(chartColumn);
   }
 
   showChart(type) {
@@ -63,27 +62,32 @@ class InequalityDashboard {
   }
 
   renderChart(chartData) {
-    const svgContainer = d3.select('#chart-svg-container');
-    svgContainer.selectAll('*').remove();
+    const svgWrapper = d3.select('.chart-visual-wrapper');
+    svgWrapper.select('svg.d3-chart').remove();
 
     const square = document.querySelector('.dashboard-square-background');
     if (!square || square.clientHeight === 0) return;
-    const squareBounds = square.getBoundingClientRect();
 
-    // Ränder für die Skalen, die außerhalb des Quadrats liegen sollen
-    const margin = { top: 10, bottom: 85, left: 70, right: 10 };
+    const squareBounds = square.getBoundingClientRect();
+    const wrapperBounds = square.parentElement.getBoundingClientRect();
 
     const innerWidth = squareBounds.width;
     const innerHeight = squareBounds.height;
 
+    // Größere Margins für mehr Abstand zu den Achsen
+    const margin = { top: 60, right: 40, bottom: 100, left: 90 };
+
     const totalWidth = innerWidth + margin.left + margin.right;
     const totalHeight = innerHeight + margin.top + margin.bottom;
 
-    const svg = svgContainer.append('svg').attr('class', 'd3-chart')
-      .attr('viewBox', `0 0 ${totalWidth} ${totalHeight}`)
-      .style('width', `${totalWidth}px`)
-      .style('height', `${totalHeight}px`)
-      .style('transform', `translate(${-margin.left}px, ${-margin.top}px)`);
+    const svgLeft = squareBounds.left - wrapperBounds.left - margin.left;
+    const svgTop = squareBounds.top - wrapperBounds.top - margin.top;
+
+    const svg = svgWrapper.append('svg').attr('class', 'd3-chart')
+      .attr('width', totalWidth)
+      .attr('height', totalHeight)
+      .style('left', `${svgLeft}px`)
+      .style('top', `${svgTop}px`);
 
     const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -92,30 +96,82 @@ class InequalityDashboard {
   }
 
   drawBarChart(g, chartData, width, height) {
-    const x = d3.scaleBand().domain(chartData.labels).range([0, width]).padding(0.2);
-    const y = d3.scaleLinear().domain([0, d3.max(chartData.values) * 1.1]).nice().range([height, 0]);
+    const x = d3.scaleBand()
+      .domain(chartData.labels)
+      .range([0, width])
+      .padding(0.05); // Sehr dünne Abstände zwischen den Balken
 
-    g.append('g').attr('class', 'axis').attr('transform', `translate(0,${height})`).call(d3.axisBottom(x))
-      .selectAll('text').attr('transform', 'translate(-10,5)rotate(-45)').style('text-anchor', 'end');
-    g.append('g').attr('class', 'axis').call(d3.axisLeft(y).ticks(5).tickFormat(d => d + (chartData.unit || '')));
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(chartData.values) * 1.1])
+      .nice()
+      .range([height, 0]);
 
-    g.selectAll('.bar').data(chartData.values).enter().append('rect').attr('class', 'bar')
-      .attr('x', (d, i) => x(chartData.labels[i])).attr('width', x.bandwidth())
-      .attr('y', d => y(d)).attr('height', d => height - y(d));
+    // X-Achse
+    g.append('g')
+      .attr('class', 'axis')
+      .attr('transform', `translate(0,${height})`)
+      .call(d3.axisBottom(x))
+      .selectAll('text')
+      .attr('transform', 'translate(-10,5)rotate(-45)')
+      .style('text-anchor', 'end');
+
+    // Y-Achse
+    g.append('g')
+      .attr('class', 'axis')
+      .call(d3.axisLeft(y).ticks(5).tickFormat(d => d + (chartData.unit || '')));
+
+    // Balken
+    g.selectAll('.bar')
+      .data(chartData.values)
+      .enter()
+      .append('rect')
+      .attr('class', 'bar')
+      .attr('x', (d, i) => x(chartData.labels[i]))
+      .attr('width', x.bandwidth())
+      .attr('y', d => y(d))
+      .attr('height', d => height - y(d));
   }
 
   drawLineChart(g, chartData, width, height) {
-    const x = d3.scalePoint().domain(chartData.labels).range([0, width]);
-    const y = d3.scaleLinear().domain(d3.extent(chartData.values, d => d * 1)).nice().range([height, 0]);
+    const x = d3.scalePoint()
+      .domain(chartData.labels)
+      .range([0, width]);
 
-    g.append("g").attr('class', 'axis').attr("transform", `translate(0,${height})`).call(d3.axisBottom(x));
-    g.append("g").attr('class', 'axis').call(d3.axisLeft(y).ticks(5));
+    const y = d3.scaleLinear()
+      .domain(d3.extent(chartData.values, d => d * 1))
+      .nice()
+      .range([height, 0]);
 
-    const line = d3.line().x((d, i) => x(chartData.labels[i])).y(d => y(d));
+    // X-Achse
+    g.append("g")
+      .attr('class', 'axis')
+      .attr("transform", `translate(0,${height})`)
+      .call(d3.axisBottom(x));
 
-    g.append("path").datum(chartData.values).attr("class", "line").attr("d", line);
-    g.selectAll(".dot").data(chartData.values).enter().append("circle").attr("class", "dot")
-      .attr("cx", (d, i) => x(chartData.labels[i])).attr("cy", d => y(d)).attr("r", 5);
+    // Y-Achse
+    g.append("g")
+      .attr('class', 'axis')
+      .call(d3.axisLeft(y).ticks(5));
+
+    // Linie
+    const line = d3.line()
+      .x((d, i) => x(chartData.labels[i]))
+      .y(d => y(d));
+
+    g.append("path")
+      .datum(chartData.values)
+      .attr("class", "line")
+      .attr("d", line);
+
+    // Punkte
+    g.selectAll(".dot")
+      .data(chartData.values)
+      .enter()
+      .append("circle")
+      .attr("class", "dot")
+      .attr("cx", (d, i) => x(chartData.labels[i]))
+      .attr("cy", d => y(d))
+      .attr("r", 5);
   }
 
   updateNavigation(activeChart) {
